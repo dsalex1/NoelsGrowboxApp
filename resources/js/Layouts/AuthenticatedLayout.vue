@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import Dropdown from '@/Components/Dropdown.vue';
-import DropdownLink from '@/Components/DropdownLink.vue';
-import NavLink from '@/Components/NavLink.vue';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+import ApplicationLogo from '@/Components/Auth/ApplicationLogo.vue';
+import Dropdown from '@/Components/Auth/Dropdown.vue';
+import DropdownLink from '@/Components/Auth/DropdownLink.vue';
+import NavLink from '@/Components/Auth/NavLink.vue';
+import ResponsiveNavLink from '@/Components/Auth/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
@@ -28,6 +28,8 @@ const showingNavigationDropdown = ref(false);
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">Dashboard</NavLink>
+                                <NavLink :href="route('logs')" :active="route().current('logs')">Logs</NavLink>
+                                <NavLink :href="route('settings')" :active="route().current('settings')">Settings</NavLink>
                             </div>
                         </div>
 
@@ -126,13 +128,17 @@ const showingNavigationDropdown = ref(false);
             <!-- Page Heading -->
             <header class="bg-white shadow" v-if="$slots.header">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <slot name="header" />
+                    <h2 class="font-semibold text-xl text-gray-800 leading-tight"><slot name="header" /></h2>
                 </div>
             </header>
 
             <!-- Page Content -->
             <main>
-                <slot />
+                <div class="py-5">
+                    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                        <slot />
+                    </div>
+                </div>
             </main>
         </div>
     </div>

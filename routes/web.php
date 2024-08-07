@@ -7,9 +7,9 @@ use Inertia\Inertia;
 
 Route::redirect('/', '/dashboard');
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->name('dashboard');
+Route::inertia('/dashboard', 'Dashboard')->name('dashboard');
+Route::inertia('/logs', 'Logs')->name('logs');
+Route::inertia('/settings', 'Settings')->name('settings');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

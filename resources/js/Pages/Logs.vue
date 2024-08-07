@@ -4,13 +4,13 @@ import { Head } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head title="Logs" />
 
     <AuthenticatedLayout>
-        <template #header>Dashboard</template>
+        <template #header>Logs</template>
 
         <v-card>
-            <div class="p-6 text-gray-900">Hello Dashboard</div>
+            <div class="p-6 text-gray-900">Hello Logs</div>
         </v-card>
     </AuthenticatedLayout>
 </template>
