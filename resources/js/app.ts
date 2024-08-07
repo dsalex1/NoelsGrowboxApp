@@ -32,4 +32,7 @@ createInertiaApp({
             .use(vuetify)
             .mount(el);
     },
+    progress: {
+        color: '#4B5563',
+    },
 });
