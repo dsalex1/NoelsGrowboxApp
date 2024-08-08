@@ -136,6 +136,13 @@ const showingNavigationDropdown = ref(false);
             <main>
                 <div class="py-5">
                     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                        <v-alert v-if="Object.keys($page.props.errors).length > 0" type="error" variant="tonal" class="mb-2" dismissible>
+                            {{
+                                Object.entries($page.props.errors)
+                                    .map(([key, value]) => key + ': ' + value)
+                                    .join(' ')
+                            }}
+                        </v-alert>
                         <slot />
                     </div>
                 </div>

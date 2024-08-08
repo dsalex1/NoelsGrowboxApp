@@ -42,10 +42,11 @@ const calculatePosition = (value: number) => {
             <!-- current -->
             <div
                 v-if="current !== undefined"
-                style="width: 4px; height: 12px; background-color: blue; position: absolute; top: 50%; transform: translate(-50%, -50%)"
+                style="width: 3px; height: 30px; background-color: crimson; position: absolute; top: 50%; transform: translate(-50%, -30px)"
                 :style="{ left: calculatePosition(current) }"
             >
-                <span style="position: absolute; top: -20px; color: blue; left: 50%; transform: translateX(-50%)">{{ current }}</span>
+                <span style="position: absolute; top: 35px; color: crimson; left: 50%; transform: translateX(-50%)">{{ current }}</span>
+                <span style="position: absolute; bottom: 25px; color: crimson; left: 50%; transform: translateX(-50%)">current</span>
             </div>
         </div>
 
