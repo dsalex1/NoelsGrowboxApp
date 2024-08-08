@@ -25,6 +25,11 @@ const props = defineProps<{
     now: string;
 }>();
 
+//partial reload sensors actuators and now every 10 seconds
+setInterval(() => {
+    router.reload({ only: ['actuators', 'sensors', 'now'] });
+}, 10000);
+
 const selectedSchedule = ref<number | null>(props.activeSchedule?.id || null);
 
 const currentDay = computed(() =>
