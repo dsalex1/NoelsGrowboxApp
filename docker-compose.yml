@@ -1,0 +1,24 @@
+services:
+    app:
+        build:
+            context: '.'
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        #depends_on:
+        #    - db
+        volumes:
+            - .:/var/www/html
+        ports:
+            - '80:80'
+    #db:
+    #    image: linuxserver/mariadb:alpine
+    #    restart: unless-stopped
+    #    environment:
+    #        MYSQL_ROOT_PASSWORD: mariadb
+    #        MYSQL_DATABASE: mariadb
+    #        MYSQL_USER: mariadb
+    #        MYSQL_PASSWORD: mariadb
+    #    ports:
+    #        - '3306:3306'
+    #    volumes:
+    #        - ../mysql:/var/lib/mysql
