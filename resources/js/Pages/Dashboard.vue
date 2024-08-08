@@ -10,7 +10,7 @@ import { Head } from '@inertiajs/vue3';
         <template #header>Dashboard</template>
 
         <v-card>
-            <div class="p-6 text-gray-900">Hello Dashboard</div>
+            <v-skeleton-loader boilerplate type="table-heading, list-item-two-line, image, table-tfoot"></v-skeleton-loader>
         </v-card>
     </AuthenticatedLayout>
 </template>
