@@ -1,0 +1,9 @@
+# this file contains the current sensor readings from the SHT35 and BMP390 sensors
+
+# read from the SHT35:
+temperature_SHT35: 25.646250479999992 # in C°
+humidity: 54.8393201 # in %
+
+#read from the BMP390:
+temperature_BMP390: 24.761615481460467 # in C°
+pressure: 1013.6962303467209 # in hPa

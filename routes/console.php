@@ -88,4 +88,4 @@ Schedule::call(function () {
     $actuatorsText = preg_replace('/fan_angle:.*/', "fan_angle: $FAN_ANGLE", $actuatorsText);
     $actuatorsText = preg_replace('/fan_power:.*/', "fan_power: $FAN_POWER", $actuatorsText);
     file_put_contents(base_path('python/actuators.yml'), $actuatorsText);
-})->everyTenSeconds();
+})->everyTwoSeconds();
