@@ -11,7 +11,14 @@ Route::redirect('/', '/dashboard');
 
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard')->with('activeSchedule', Schedule::where('is_active', 1)->first())->with('schedules', Schedule::all());
+    $actuators = yaml_parse_file(base_path('python/actuators.yml'));
+    $sensors = yaml_parse_file(base_path('python/sensors.yml'));
+    return Inertia::render('Dashboard')
+        ->with('activeSchedule', Schedule::where('is_active', 1)->first())
+        ->with('schedules', Schedule::all())
+        ->with('actuators', $actuators)
+        ->with('sensors', $sensors)
+        ->with('now', now());
 })->name('dashboard');
 
 Route::inertia('/logs', 'Logs')->name('logs');

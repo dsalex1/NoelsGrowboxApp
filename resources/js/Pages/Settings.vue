@@ -53,7 +53,7 @@ function saveSchedule() {
                         <!-- select from the vpd options with colors and values and desctiontion-->
                         <v-select
                             v-model="scheduleItem.vpd"
-                            :itemProps="s => ({ title: s.vpd_range, subtitle: s.description, value: s.median_vpd_value })"
+                            :itemProps="s => ({ title: s.vpd_range, subtitle: s.description, value: '' + s.median_vpd_value })"
                             :items="VPDs"
                             label="VPD"
                             hide-details

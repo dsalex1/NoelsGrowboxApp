@@ -27,6 +27,7 @@ RUN apt-get install -y \
     zlib1g-dev \
     libxml2-dev \
     libzip-dev \
+    libyaml-dev \
     graphviz \
     poppler-utils \
     g++ \
@@ -36,7 +37,9 @@ RUN apt-get install -y \
     && docker-php-ext-install -j$(nproc) gd
 
 # Install php-mysql driver
-RUN docker-php-ext-install bz2 intl iconv bcmath opcache calendar mbstring pdo_mysql zip gmp mysqli pdo
+RUN docker-php-ext-install bz2 intl iconv bcmath opcache calendar mbstring pdo_mysql zip gmp mysqli pdo 
+
+RUN pecl install yaml && echo "extension=yaml.so" > /usr/local/etc/php/conf.d/ext-yaml.ini && docker-php-ext-enable yaml
 
 # [Choice] Node.js version: none, lts/*, 16, 14, 12, 10
 ARG NODE_VERSION="none"
