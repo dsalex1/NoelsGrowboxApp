@@ -25,7 +25,9 @@
         "@date-io/date-fns": "^3.0.0",
         "@mdi/font": "^7.4.47",
         "@vueuse/core": "^10.10.0",
+        "apexcharts": "^3.52.0",
         "luxon": "^3.4.4",
+        "vue3-apexcharts": "^1.5.3",
         "vuetify": "^3.6.8"
     }
 }

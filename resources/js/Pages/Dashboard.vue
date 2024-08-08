@@ -247,7 +247,7 @@ function calculateVPD(tempCelsius: number, relativeHumidity: number) {
                     <v-card class="h-100" prepend-icon="mdi-fan" title="Fan" variant="tonal" style="border: 1px solid" color="blue">
                         <v-card-text>
                             <strong style="font-size: 1.75rem">
-                                <div>Angle: {{ Math.round(actuators.fan_angle - 0.5 * 45) }}°</div>
+                                <div>Angle: {{ Math.round((actuators.fan_angle - 0.5) * 45) }}°</div>
                                 <div>Power: {{ Math.round(actuators.fan_power * 100) }}%</div>
                             </strong>
                         </v-card-text>
@@ -259,8 +259,9 @@ function calculateVPD(tempCelsius: number, relativeHumidity: number) {
                         prepend-icon="mdi-lightbulb"
                         title="Lamp"
                         variant="text"
-                        style="border: 1px solid; background-color: #ffd"
-                        color="orange"
+                        style="border: 1px solid"
+                        :style="{ backgroundColor: actuators.lamp ? '#ffd' : '#f5f5f5' }"
+                        :color="actuators.lamp ? 'orange' : '#666'"
                     >
                         <v-card-text>
                             <strong style="font-size: 1.75rem">
