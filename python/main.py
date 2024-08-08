@@ -107,7 +107,7 @@ pressure: 0 # in hPa
     except Exception as e: 
         print(e) 
 
-    time.sleep(5)
+    time.sleep(2)
 
 teardown()
 
