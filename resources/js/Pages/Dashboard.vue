@@ -6,6 +6,7 @@ import { DateTime } from 'luxon';
 import { VNumberInput } from 'vuetify/labs/VNumberInput';
 import { computed, ref } from 'vue';
 import { Schedule, VPDs } from '@/types/types';
+import { useStorage } from '@vueuse/core';
 
 const props = defineProps<{
     schedules: Schedule[];
@@ -25,10 +26,12 @@ const props = defineProps<{
     now: string;
 }>();
 
-//partial reload sensors actuators and now every 10 seconds
-setInterval(() => {
+//partial reload sensors actuators and now every 5 seconds, and make sure every only one is active
+const interval = useStorage('interval', 0);
+clearInterval(interval.value);
+interval.value = setInterval(() => {
     router.reload({ only: ['actuators', 'sensors', 'now'] });
-}, 10000);
+}, 5000);
 
 const selectedSchedule = ref<number | null>(props.activeSchedule?.id || null);
 
