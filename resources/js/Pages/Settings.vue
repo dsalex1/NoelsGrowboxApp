@@ -45,7 +45,7 @@ function saveSchedule() {
         </v-row>
         <v-timeline side="end">
             <v-timeline-item :dot-color="scheduleItem.color" size="small" v-for="(scheduleItem, index) of form.items">
-                <v-row style="width: 80vw" class="py-2">
+                <v-row style="justify-self: stretch" class="py-2 me-5">
                     <v-col cols="12" md="2" class="d-flex align-center">
                         <strong class="me-4">{{ scheduleItem.label }}</strong>
                     </v-col>

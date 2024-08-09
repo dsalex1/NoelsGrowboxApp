@@ -106,6 +106,8 @@ const showingNavigationDropdown = ref(false);
                 <div :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }" class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">Dashboard</ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('logs')" :active="route().current('logs')">Logs</ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('settings')" :active="route().current('settings')">Settings</ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
