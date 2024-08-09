@@ -43,9 +43,9 @@ function saveSchedule() {
                 <v-number-input v-model="form.cycleLength" label="Cycle Length (days)" :min="0" hide-details></v-number-input>
             </v-col>
         </v-row>
-        <v-timeline side="end">
+        <v-timeline side="end" class="px-8" style="grid-template-columns: auto min-content 1fr">
             <v-timeline-item :dot-color="scheduleItem.color" size="small" v-for="(scheduleItem, index) of form.items">
-                <v-row style="justify-self: stretch" class="py-2 me-5">
+                <v-row class="py-2 me-5">
                     <v-col cols="12" md="2" class="d-flex align-center">
                         <strong class="me-4">{{ scheduleItem.label }}</strong>
                     </v-col>
@@ -90,3 +90,9 @@ function saveSchedule() {
         </div>
     </AuthenticatedLayout>
 </template>
+
+<style>
+.v-timeline-item__body {
+    justify-self: unset !important;
+}
+</style>
