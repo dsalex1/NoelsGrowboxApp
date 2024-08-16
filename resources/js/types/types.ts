@@ -15,6 +15,12 @@ export type Schedule = DBObject & {
     start_date: string | null;
 };
 
+export type DataLog = DBObject & {
+    type: 'temperature_SHT35' | 'humidity' | 'temperature_BMP390' | 'pressure' | 'VPD';
+    value: number;
+    unit: '°C' | '%' | 'hPa' | 'kPa';
+};
+
 export const VPDs = [
     {
         color: '#1A6C9C',

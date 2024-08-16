@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScheduleController;
+use App\Models\DataLog;
 use App\Models\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -21,7 +22,10 @@ Route::get('/dashboard', function () {
         ->with('now', now());
 })->name('dashboard');
 
-Route::inertia('/logs', 'Logs')->name('logs');
+Route::get('/logs', function () {
+    return Inertia::render('Logs')
+        ->with('dataLogs', DataLog::latest()->limit(10000)->get());
+})->name('logs');
 
 Route::get('/settings', function () {
     return Inertia::render('Settings')->with('schedule', Schedule::where('is_active', true)->first());
