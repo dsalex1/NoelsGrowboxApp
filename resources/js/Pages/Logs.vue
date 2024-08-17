@@ -23,6 +23,11 @@ import VChart from 'vue-echarts';
 import * as echarts from 'echarts';
 
 import { DataLog } from '@/types/types';
+import { useStorage } from '@vueuse/core';
+
+//clear the partial reload interval from dashboard
+const interval = useStorage('interval', 0);
+clearInterval(interval.value);
 
 // this is neccessary becaues vite wouldnt import echarts otherwise if its unused
 window.echarts = echarts;
@@ -61,7 +66,9 @@ const availableDataSeries = [
     },
 ];
 
-const groupedData = computed(() => dataLogs.value.groupBy(item => item.created_at.substring(0, 16)));
+const groupedData = computed(() =>
+    dataLogs.value.sort((a, b) => (a.created_at > b.created_at ? 1 : -1)).groupBy(item => item.created_at.substring(0, 16))
+);
 
 const dataSeriesStatus = ref(availableDataSeries.map(s => ({ ...s, checked: true })));
 
