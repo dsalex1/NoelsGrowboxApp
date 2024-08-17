@@ -23,9 +23,9 @@ Route::get('/dashboard', function () {
 })->name('dashboard');
 
 Route::get('/logs', function () {
-    return Inertia::render('Logs')
-        ->with('dataLogs', DataLog::latest()->limit(10000)->get());
-})->name('logs');
+    return Inertia::render('Logs')                                                   
+        ->with('dataLogs', DataLog::latest()->limit(5000)->where('created_at','like','____-__-__ __:_0:__')->get()); // get records every 10 minutes 
+})->name('logs'); 
 
 Route::get('/settings', function () {
     return Inertia::render('Settings')->with('schedule', Schedule::where('is_active', true)->first());
