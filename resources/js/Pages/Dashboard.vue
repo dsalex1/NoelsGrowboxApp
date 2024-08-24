@@ -255,7 +255,8 @@ function calculateVPD(tempCelsius: number, relativeHumidity: number) {
                     <v-card class="h-100" prepend-icon="mdi-fan" title="Fan" variant="tonal" style="border: 1px solid" color="blue">
                         <v-card-text>
                             <strong style="font-size: 1.75rem">
-                                <div>Angle: {{ Math.round((actuators.fan_angle - 0.5) * 45) }}°</div>
+                                <div v-if="actuators.fan_angle != -1">Angle: {{ Math.round((actuators.fan_angle - 0.5) * 45) }}°</div>
+                                <div v-else>Halfcycle: {{actuators.fan_half_cycle_duration}}s</div>
                                 <div>Power: {{ Math.round(actuators.fan_power * 100) }}%</div>
                             </strong>
                         </v-card-text>

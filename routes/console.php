@@ -66,26 +66,20 @@ Schedule::call(function () {
     $offset = 0;
     $LAMP = (now()->hour >= 0 + $offset && now()->hour < $activeItem['lightHours'] + $offset) ? 'True' : 'False';
 
-    $VENT_POWER = ($activeItem['vpd'] - 0.6) / 0.8; //replace by actual PID controller or something, if it works at all, actually this x or 1-x possibly
+    $targetVPD = $activeItem['vpd'];
+    $currentVPD = calculateVPD($sensors['temperature_SHT35'], $sensors['humidity']);
 
+    $VENT_POWER = ($targetVPD - 0.6) / 0.8; //replace by actual PID controller or something, if it works at all, actually this x or 1-x possibly
+
+    //$FAN_HALF_CYLE_DURATION = 4;
+    //$FAN_POWER = 0.2;
+    //$FAN_ANGLE = -1;
 
     $actuatorsText = file_get_contents(base_path('python/actuators.yml'));
     $actuatorsText = preg_replace('/lamp:.*/', "lamp: $LAMP", $actuatorsText);
-    $actuatorsText = preg_replace('/vent_power:.*/', "vent_power: $VENT_POWER", $actuatorsText);
+    //$actuatorsText = preg_replace('/vent_power:.*/', "vent_power: $VENT_POWER", $actuatorsText);
+    //$actuatorsText = preg_replace('/fan_angle:.*/', "fan_half_cycle_duration: $FAN_HALF_CYLE_DURATION", $actuatorsText);
+    //$actuatorsText = preg_replace('/fan_angle:.*/', "fan_angle: $FAN_ANGLE", $actuatorsText);
+    //$actuatorsText = preg_replace('/fan_power:.*/', "fan_power: $FAN_POWER", $actuatorsText);
     file_put_contents(base_path('python/actuators.yml'), $actuatorsText);
 })->everyMinute();
-
-Schedule::call(function () {
-    $fullRevolution = 2;
-
-    $t = (fmod(now()->minute + now()->second / 60, $fullRevolution)) / $fullRevolution;
-
-    $FAN_ANGLE = $t < 0.5 ? 2 * $t : 2 * (1 - $t); //go forward on first half backward on second half
-
-    $FAN_POWER = 0.2;
-
-    $actuatorsText = file_get_contents(base_path('python/actuators.yml'));
-    $actuatorsText = preg_replace('/fan_angle:.*/', "fan_angle: $FAN_ANGLE", $actuatorsText);
-    $actuatorsText = preg_replace('/fan_power:.*/', "fan_power: $FAN_POWER", $actuatorsText);
-    file_put_contents(base_path('python/actuators.yml'), $actuatorsText);
-})->everyTwoSeconds();
