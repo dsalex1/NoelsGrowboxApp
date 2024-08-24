@@ -4,7 +4,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScheduleController;
 use App\Models\DataLog;
 use App\Models\Schedule;
+use Carbon\Carbon;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -22,10 +24,25 @@ Route::get('/dashboard', function () {
         ->with('now', now());
 })->name('dashboard');
 
-Route::get('/logs', function () {
-    return Inertia::render('Logs')                                                   
-        ->with('dataLogs', DataLog::latest()->limit(5000)->where('created_at','like','____-__-__ __:_0:__')->get()); // get records every 10 minutes 
-})->name('logs'); 
+Route::get('/logs', function (Request $request) {
+    // use dataPointInterval, endDate, numberOfDataPoints from query
+    $validated = $request->validate([
+        'dataPointInterval' => 'nullable|integer',
+        'endDate' => 'nullable|date',
+        'numberOfDataPoints' => 'nullable|integer|max:10000',
+    ]);
+    $data = DataLog::latest()->limit(array_key_exists("numberOfDataPoints", $validated) ? $validated["numberOfDataPoints"] : 1000);
+
+    if (array_key_exists("endDate", $validated))
+        $data = $data->where('created_at', '<', (new Carbon($validated["endDate"]))->addDay());
+
+    if (!array_key_exists("dataPointInterval", $validated) || $validated["dataPointInterval"] == 10)
+        $data = $data->where('created_at', 'like', '____-__-__ __:_0:__');
+    else if (array_key_exists("endDate", $validated) && $validated["dataPointInterval"] == 60)
+        $data = $data->where('created_at', 'like', '____-__-__ __:00:__');
+
+    return Inertia::render('Logs')->with('dataLogs', $data->get());
+})->name('logs');
 
 Route::get('/settings', function () {
     return Inertia::render('Settings')->with('schedule', Schedule::where('is_active', true)->first());
