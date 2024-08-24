@@ -15,10 +15,11 @@ Array.prototype.groupBy = function <K extends string>(f: (item: any) => K) {
 </script>
 
 <script setup lang="ts">
+import { VDateInput } from 'vuetify/labs/VDateInput';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 
-import { computed, ref, toRefs } from 'vue';
+import { computed, nextTick, ref, toRefs, watch } from 'vue';
 import VChart from 'vue-echarts';
 import * as echarts from 'echarts';
 
@@ -35,6 +36,20 @@ window.echarts = echarts;
 const props = defineProps<{
     dataLogs: DataLog[];
 }>();
+
+const dataPointInterval = ref(10);
+const endDate = ref(null);
+const numberOfDataPoints = ref(1000);
+
+watch([dataPointInterval, endDate, numberOfDataPoints], () => {
+    router.reload({
+        data: {
+            dataPointInterval: dataPointInterval.value,
+            endDate: endDate.value,
+            numberOfDataPoints: numberOfDataPoints.value,
+        },
+    });
+});
 
 const { dataLogs } = toRefs(props);
 
@@ -80,7 +95,11 @@ function roundSigDigits(value: number, significant: number, type: 'ceil' | 'floo
     return (Math[type](value / factor) * factor).toFixed(5);
 }
 
-console.log([]);
+const firstRender = ref(true);
+nextTick(() => {
+    firstRender.value = false;
+});
+
 const chartOptions = computed(() => ({
     tooltip: {
         trigger: 'axis',
@@ -97,21 +116,23 @@ const chartOptions = computed(() => ({
             saveAsImage: {},
         },
     },
-    dataZoom: [
-        {
-            type: 'inside',
-            start: 0,
-            end: 10,
-        },
-        {
-            start: 0,
-            end: 10,
-        },
-    ],
+    ...(firstRender.value
+        ? {
+              dataZoom: [
+                  {
+                      type: 'inside',
+                      start: 90,
+                      end: 100,
+                  },
+                  {
+                      type: 'slider',
+                  },
+              ],
+          }
+        : {}),
     xAxis: {
-        type: 'category',
+        type: 'time',
         boundaryGap: false,
-        data: groupedData.value.map(group => group.key + ':00'),
     },
     yAxis:
         dataSeries.value.length > 0
@@ -136,6 +157,7 @@ const chartOptions = computed(() => ({
                   name: `None Selected`,
               },
     series: dataSeries.value.map((series, index) => ({
+        id: series.name,
         name: series.name,
         type: 'line',
         symbol: 'none',
@@ -150,7 +172,7 @@ const chartOptions = computed(() => ({
             .findIndex(value => value === series.name.split('_')[0]),
         data: groupedData.value.map(group => {
             const item = group.items.find(item => item.type === series.name);
-            return item ? item.value : null;
+            return [new Date(group.key + ':00').getTime(), item ? item.value : null];
         }),
     })),
 }));
@@ -163,6 +185,30 @@ const chartOptions = computed(() => ({
         <template #header>Logs</template>
 
         <v-card>
+            <v-card-title>Settings</v-card-title>
+            <v-card-text>
+                <!-- data point time interval, end date, number of datapoints-->
+                <v-row>
+                    <v-col cols="12" md="4">
+                        <v-select
+                            v-model="dataPointInterval"
+                            :items="[
+                                { title: '1 Minute', value: 1 },
+                                { title: '10 Minutes', value: 10 },
+                                { title: '1 Hour', value: 60 },
+                            ]"
+                            label="Interval between Data Points"
+                            outlined
+                        ></v-select>
+                    </v-col>
+                    <v-col cols="12" md="4" class="dateInput">
+                        <v-date-input v-model="endDate" label="End Date"></v-date-input>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                        <v-select v-model="numberOfDataPoints" :items="[1000, 5000, 10000]" label="Number of Data Points" outlined></v-select>
+                    </v-col>
+                </v-row>
+            </v-card-text>
             <v-card-title>Series</v-card-title>
             <v-card-text>
                 <div class="d-flex flex-wrap gap-3">
@@ -175,7 +221,13 @@ const chartOptions = computed(() => ({
                     />
                 </div>
             </v-card-text>
-            <v-chart :option="chartOptions" style="height: 600px"></v-chart>
+            <v-chart :option="chartOptions" :update-options="{ notMerge: false, replaceMerge: ['series', 'yAxis'] }" style="height: 600px"></v-chart>
         </v-card>
     </AuthenticatedLayout>
 </template>
+
+<style>
+.dateInput input {
+    height: 28px;
+}
+</style>
