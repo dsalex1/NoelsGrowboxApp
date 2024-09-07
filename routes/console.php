@@ -63,6 +63,8 @@ Schedule::call(function () {
         return $value['start'] <= $activeSchedule->start_date->diffInDays(now());
     });
 
+    //#####################################################################################################################################
+
     $offset = 0;
     $LAMP = (now()->hour >= 0 + $offset && now()->hour < $activeItem['lightHours'] + $offset) ? 'True' : 'False';
 
@@ -71,15 +73,43 @@ Schedule::call(function () {
 
     $VENT_POWER = ($targetVPD - 0.6) / 0.8; //replace by actual PID controller or something, if it works at all, actually this x or 1-x possibly
 
-    //$FAN_HALF_CYLE_DURATION = 4;
-    //$FAN_POWER = 0.2;
-    //$FAN_ANGLE = -1;
+    $currentHour = now()->hour + now()->minute / 60;
+
+    $interpolatedAngleSpeed = interpolateY($activeItem['ventFanAngleSpeedCurve'], $currentHour);
+    if ($interpolatedAngleSpeed == 0) {
+        $FAN_HALF_CYLE_DURATION = -1;
+        $FAN_ANGLE = 0.5;
+    } else {
+        $FAN_HALF_CYLE_DURATION = 100 / $interpolatedAngleSpeed;
+        $FAN_ANGLE = -1;
+    }
+
+    $FAN_POWER = interpolateY($activeItem['ventFanPowerCurve'], $currentHour) / 100;
+
+    //#####################################################################################################################################
 
     $actuatorsText = file_get_contents(base_path('python/actuators.yml'));
     $actuatorsText = preg_replace('/lamp:.*/', "lamp: $LAMP", $actuatorsText);
     //$actuatorsText = preg_replace('/vent_power:.*/', "vent_power: $VENT_POWER", $actuatorsText);
-    //$actuatorsText = preg_replace('/fan_angle:.*/', "fan_half_cycle_duration: $FAN_HALF_CYLE_DURATION", $actuatorsText);
-    //$actuatorsText = preg_replace('/fan_angle:.*/', "fan_angle: $FAN_ANGLE", $actuatorsText);
-    //$actuatorsText = preg_replace('/fan_power:.*/', "fan_power: $FAN_POWER", $actuatorsText);
+    $actuatorsText = preg_replace('/fan_half_cycle_duration:.*/', "fan_half_cycle_duration: $FAN_HALF_CYLE_DURATION", $actuatorsText);
+    $actuatorsText = preg_replace('/fan_angle:.*/', "fan_angle: $FAN_ANGLE", $actuatorsText);
+    $actuatorsText = preg_replace('/fan_power:.*/', "fan_power: $FAN_POWER", $actuatorsText);
     file_put_contents(base_path('python/actuators.yml'), $actuatorsText);
-})->everyMinute();
+})->everyFiveSeconds();
+
+function interpolateY(array $points, float $x): float
+{
+    // if x is out of bounds, return the closest y value
+    if ($x <= $points[0][0]) return $points[0][1];
+    if ($x >= $points[count($points) - 1][0]) return $points[count($points) - 1][1];
+
+    // Loop through points to find the interpolation interval
+    foreach ($points as $i => $point) {
+        if ($point[0] === $x) return $point[1]; // Exact x match, return corresponding y
+        if ($point[0] > $x) {  // Perform interpolation between points[i-1] and points[i]
+            [$x1, $y1] = $points[$i - 1];
+            [$x2, $y2] = $point;
+            return $y1 + (($x - $x1) * ($y2 - $y1)) / ($x2 - $x1);  // Linear interpolation formula
+        }
+    }
+}

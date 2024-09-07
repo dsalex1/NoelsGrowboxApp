@@ -22,6 +22,7 @@ const props = defineProps<{
         fan_angle: number;
         fan_power: number;
         vent_power: number;
+        fan_half_cycle_duration: number;
     };
     now: string;
 }>();
@@ -256,7 +257,7 @@ function calculateVPD(tempCelsius: number, relativeHumidity: number) {
                         <v-card-text>
                             <strong style="font-size: 1.75rem">
                                 <div v-if="actuators.fan_angle != -1">Angle: {{ Math.round((actuators.fan_angle - 0.5) * 45) }}°</div>
-                                <div v-else>Halfcycle: {{actuators.fan_half_cycle_duration}}s</div>
+                                <div v-else>Halfcycle: {{ Math.round(actuators.fan_half_cycle_duration * 10) / 10 }}s</div>
                                 <div>Power: {{ Math.round(actuators.fan_power * 100) }}%</div>
                             </strong>
                         </v-card-text>

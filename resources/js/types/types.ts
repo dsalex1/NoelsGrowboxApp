@@ -10,7 +10,15 @@ type Prettify<T> = {
 
 export type Schedule = DBObject & {
     cycle_length: number;
-    items: { label: string; start: number; color: string; vpd: number; lightHours: number }[];
+    items: {
+        label: string;
+        start: number;
+        color: string;
+        vpd: number;
+        lightHours: number;
+        ventFanPowerCurve: [number, number][];
+        ventFanAngleSpeedCurve: [number, number][];
+    }[];
     is_active: boolean;
     start_date: string | null;
 };

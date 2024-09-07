@@ -39,6 +39,14 @@ class ScheduleController extends Controller
             'items.*.vpd' => 'required|numeric',
             'items.*.lightHours' => 'required|integer',
 
+            'items.*.ventFanPowerCurve' => 'required|array',
+            'items.*.ventFanPowerCurve.*' => 'required|array',
+            'items.*.ventFanPowerCurve.*.*' => 'required|numeric',
+
+            'items.*.ventFanAngleSpeedCurve' => 'required|array',
+            'items.*.ventFanAngleSpeedCurve.*' => 'required|array',
+            'items.*.ventFanAngleSpeedCurve.*.*' => 'required|numeric',
+
             'cycle_length' => 'required|integer',
         ]);
         Schedule::updateOrCreate([], $validated);
