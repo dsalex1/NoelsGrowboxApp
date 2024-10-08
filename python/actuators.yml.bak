@@ -2,16 +2,16 @@
 # it is read in real time by the main.py script to control the actuators
 
 # lamp is a boolean with values True or False to turn it on or off
-lamp: False
+lamp: True
 
 # fan_angle is a float between 0 and 1 to set the angle of the air circulation fan
 # with 0.5 being parallel to the wall, and 0 and 1 being approx. -45° and 45° respectively
 fan_angle: 0.48333333333333
 
-fan_half_cycle_duration: 0
+fan_half_cycle_duration: 5
 
 # fan_power is a float between 0 and 1 to set the power of the air circulation fan
 fan_power: 0.2
 
 # vent_power is a float between 0 and 1 to set the power of the main ventilation fan
-vent_power: 0.5
+vent_power: 0.4

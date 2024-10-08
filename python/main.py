@@ -14,7 +14,7 @@ GPIO.setwarnings(False)
 # 3v3 orange
 SDA_GPIO = 2 #green
 SCL_GPIO = 3 #blue
-LAMP_RELAY_GPIO = 4 #yellow
+LAMP_RELAY_GPIO = 23 #yellow
 PWM_FAN_ANGLE_GPIO = 6 #brown
 PWM_FAN_POWER_GPIO = 13 #red
 PWM_VENT_POWER_GPIO = 12 #white
