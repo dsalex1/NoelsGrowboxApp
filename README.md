@@ -24,11 +24,17 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 ```bash
 mkdir -p /var/www && cd /var/www && git clone https://github.com/dsalex1/NoelsGrowboxApp.git
 ```
-### 3. Start webserver
+### 3. Start webserver container
 ```bash
-cd /var/www/NoelsGrowboxApp && docker compose up -d 
+cd /var/www/NoelsGrowboxApp && docker compose up -d
 ```
-### 4. Install and start python as a service 
+### 4. Setup webserver
+run in app container
+```bash
+composer install && npm install && cp .env.example .env && php artisan key:generate && php artisan migrate --seed
+```
+
+### 5. Install and start python as a service 
 ```bash
 sudo echo "[Unit]\nDescription=Noels Growbox Python Service\nAfter=network-online.target\n[Service]\nExecStart=/usr/bin/python3 /var/www/NoelsGrowboxApp/python/main.py\nRestart=always\n[Install]\nWantedBy=multi-user.target" > /etc/systemd/system/noelsgrowboxapp.service
 sudo chmod 664 /etc/systemd/system/noelsgrowboxapp.service
