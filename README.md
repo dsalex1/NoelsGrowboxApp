@@ -22,7 +22,7 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 ```
 ### 2. Clone repo
 ```bash
-mkdir -p /var/www && cd /var/www && git clone https://github.com/dsalex1/NoelsGrowboxApp.git
+sudo mkdir -p /var/www && sudo chmod 777 /var/www && cd /var/www && git clone https://github.com/dsalex1/NoelsGrowboxApp.git
 ```
 ### 3. Start webserver container
 ```bash
