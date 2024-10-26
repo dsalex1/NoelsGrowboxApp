@@ -31,7 +31,7 @@ cd /var/www/NoelsGrowboxApp && docker compose up -d
 ### 4. Setup webserver
 run in app container
 ```bash
-composer install && cp .env.example .env && php artisan key:generate && php artisan migrate --seed && chmod 777 storage -R
+composer install && cp .env.example .env && php artisan key:generate && php artisan migrate --seed && chmod 777 storage -R && chmod 777 database -R
 ```
 
 ### 5. Install and start python as a service 
