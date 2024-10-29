@@ -36,7 +36,8 @@ composer install && cp .env.example .env && php artisan key:generate && php arti
 
 ### 5. Install and start python as a service 
 ```bash
-sudo echo "[Unit]\nDescription=Noels Growbox Python Service\nAfter=network-online.target\n[Service]\nExecStart=/usr/bin/python3 /var/www/NoelsGrowboxApp/python/main.py\nRestart=always\n[Install]\nWantedBy=multi-user.target" > /etc/systemd/system/noelsgrowboxapp.service
+echo "[Unit]\nDescription=Noels Growbox Python Service\nAfter=network-online.target\n[Service]\nWorkingDirectory=/var/www/NoelsGrowboxApp/python\nExecStart=/usr/bin/python3 /var/www/NoelsGrowboxApp/python/main.py\nRestart=always\n[Install]\nWantedBy=multi-user.target" > /tmp/service.tmp
+sudo mv /tmp/service.tmp /etc/systemd/system/noelsgrowboxapp.service
 sudo chmod 664 /etc/systemd/system/noelsgrowboxapp.service
 sudo systemctl daemon-reload
 sudo systemctl start noelsgrowboxapp.service
